@@ -1,0 +1,251 @@
+$elephant-color: #20639c;
+$trunk-color: #434c8a;
+$nostril-color: $trunk-color;
+$ear-color: #487faf;
+$hat-color: #313131;
+
+$walk-speed: 0.8s;
+$walk-size: 0.06em;
+
+$trunk-swing-speed: 1s;
+$trunk-swing-size: 20deg;
+
+$hat-bounce-speed: 0.3s;
+
+$animating: true;
+
+body {
+  padding-top: 20vh;
+  background-color: #ff4fb0;
+}
+
+.elephant {
+  position: relative;
+  font-size: 200px;
+  width: 1em;
+  height: 1em;
+  z-index: 1;
+
+  &-body {
+    position: absolute;
+    width: 1em;
+    height: 0.8em;
+    border-radius: 100%;
+    background-color: $elephant-color;
+    z-index: 5;
+  }
+  
+  &-head {
+    position: absolute;
+    width: 0.6em;
+    height: 0.6em;
+    left: 0.2em;
+    top: -0.05em;
+    border-radius: 100%;
+    background-color: lighten($elephant-color, 20%);
+    z-index: 5;
+  }
+
+  &-hat {
+    position: absolute;
+    width: 0.3em;
+    height: 0.26em;
+    top: -0.17em;
+    left: .15em;
+    background-color: $hat-color;
+    @if $animating {
+      animation: hatBounce $hat-bounce-speed infinite alternate;
+    }
+    animation-timing-function: cubic-bezier(.2,0.05,1,.5);
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0.45em;
+      height: 0.08em;
+      bottom: 0;
+      left: -0.075em;
+      background-color: $hat-color;
+    }
+  }
+
+  &-ears {
+    position: absolute;
+    width: 0.6em;
+    height: 0.6em;
+    left: 0.2em;
+    top: -0.05em;
+    z-index: 5;
+
+    &::after,
+    &::before {
+      content: '';
+      position: absolute;
+      width: 0.25em;
+      height: 0.45em;
+      left: -0.1em;
+      top: 0.04em;
+      border-radius: 100%;
+      background-color: $ear-color;
+      transform: rotate(25deg);
+    }
+    &::before {
+      left: auto;
+      right: -0.1em;
+      top: 0.04em;
+      transform: rotate(-25deg);
+    }
+  }
+
+  &-horns {
+    position: absolute;
+    width: 0.6em;
+    height: 0.6em;
+    left: 0.2em;
+    top: -0.05em;
+    z-index: 5;
+
+    &::after,
+    &::before {
+      content: '';
+      position: absolute;
+      height: 0.18em;
+      width: 0.04em;
+      top: 0.47em;
+      left: 0.18em;
+      background-color: #fff;
+      border-radius: 100%;
+      transform: rotate(15deg);
+    }
+    &::before {
+      left: auto;
+      right: 0.18em;
+      transform: rotate(-15deg);
+    }
+  }
+
+  &-eyes {
+    position: absolute;
+    width: 0.6em;
+    height: 0.6em;
+    top: 0;
+    left: 0;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0.09em;
+      height: 0.09em;
+      top: 0.2em;
+      left: 0.1em;
+      border-radius: 100%;
+      background-color: #000;
+      box-shadow: inset 0px 0px 0px 5px #fff;
+      z-index: 15;
+    }
+    &::after {
+      left: auto;
+      right: 0.1em;
+    }
+  }
+
+  &-trunk {
+    position: absolute;
+    width: 0.1em;
+    height: 0.45em;
+    top: 0.3em;
+    left: 0.25em;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    background-color: $trunk-color;
+    @if $animating {
+      animation: trunkSwing $trunk-swing-speed ease-in-out infinite;
+    }
+    transform-origin: 0.05em 0.05em;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0.1em;
+      height: 0.03em;
+      left: 0;
+      bottom: -0.015em;
+      border-radius: 100%;
+      background-color: lighten($trunk-color, 20%);
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      width: 0.03em;
+      height: 0.015em;
+      bottom: -0.007em;
+      left: 0.008em;
+      border-radius: 100%;
+      background-color: $nostril-color;
+      z-index: 20;
+      box-shadow: 0.056em 0 0 0 $nostril-color;
+    }
+  }
+
+  &-feet {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    top: 0;
+    left: 0;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0.15em;
+      height: 0.2em;
+      top: 0.65em;
+      left: 0.2em;
+      background-color: lighten($elephant-color, 20%);
+      z-index: 1;
+      @if $animating {
+        animation: legWalk $walk-speed ease-out infinite;
+      }
+    }
+    &::after {
+      left: auto;
+      right: 0.2em;
+      animation-delay: $walk-speed / 2;
+    }
+  }
+}
+
+@keyframes legWalk {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-$walk-size);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes trunkSwing {
+  0% {
+    transform: rotate(-$trunk-swing-size);
+  }
+  50% {
+    transform: rotate($trunk-swing-size);
+  }
+  100% {
+    transform: rotate(-$trunk-swing-size);
+  }
+}
+
+@keyframes hatBounce {
+  0% {
+    transform: translateY(-0.1em);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
